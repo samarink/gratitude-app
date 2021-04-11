@@ -1,6 +1,7 @@
 import express from 'express';
 import Gratitude from '../models/gratitude';
 import validateGratitude from '../validation/gratitude';
+import { toGratitudeObject } from '../utils/parseHelpers';
 
 const router = express.Router();
 
@@ -16,11 +17,7 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const gratitudeObject = {
-    text: req.sanitize(req.body.text),
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
+  const gratitudeObject = toGratitudeObject(req.body);
 
   const { errors, isValid } = validateGratitude(gratitudeObject);
 
@@ -36,11 +33,7 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
-  const gratitudeObject = {
-    text: req.sanitize(req.body.text),
-    createdAt: new Date(req.sanitize(req.body.createdAt)),
-    updatedAt: new Date(),
-  };
+  const gratitudeObject = toGratitudeObject(req.body);
 
   const { errors, isValid } = validateGratitude(gratitudeObject);
 

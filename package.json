@@ -16,9 +16,9 @@
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
-    "express-sanitizer": "^1.0.5",
     "mongoose": "^5.12.3",
-    "validator": "^13.5.2"
+    "validator": "^13.5.2",
+    "xss": "^1.0.8"
   },
   "devDependencies": {
     "eslint": "^7.23.0",
