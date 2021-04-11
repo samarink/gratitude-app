@@ -1,9 +1,14 @@
 import express from 'express';
+import 'express-async-errors';
 import mongoose from 'mongoose';
+import logger from './utils/logger';
+import middleware from './utils/middleware';
 import gratitudesRouter from './routes/gratitudes';
 import { PORT, MONGODB_URI } from './config';
 
 const app = express();
+
+logger.info('connecting to', MONGODB_URI);
 
 mongoose
   .connect(MONGODB_URI, {
@@ -13,14 +18,17 @@ mongoose
     useCreateIndex: true,
   })
   .then(() => {
-    console.log('connected to MongoDB');
+    logger.info('connected to MongoDB');
   })
   .catch((error) => {
-    console.error('error connecting to MongoDB:', error.message);
+    logger.error('error connecting to MongoDB:', error.message);
   });
 
 app.use('/api/gratitudes', gratitudesRouter);
 
+app.use(middleware.unknownEndpoint);
+app.use(middleware.errorHandler);
+
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  logger.info(`Server is running on port ${PORT}`);
 });
