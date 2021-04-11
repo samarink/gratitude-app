@@ -1,34 +1,10 @@
-import express from 'express';
-import 'express-async-errors';
-import mongoose from 'mongoose';
+import app from './app';
+import { createServer } from 'http';
+import { PORT } from './config';
 import logger from './utils/logger';
-import middleware from './utils/middleware';
-import gratitudesRouter from './routes/gratitudes';
-import { PORT, MONGODB_URI } from './config';
 
-const app = express();
+const server = createServer(app);
 
-logger.info('connecting to', MONGODB_URI);
-
-mongoose
-  .connect(MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
-  })
-  .then(() => {
-    logger.info('connected to MongoDB');
-  })
-  .catch((error) => {
-    logger.error('error connecting to MongoDB:', error.message);
-  });
-
-app.use('/api/gratitudes', gratitudesRouter);
-
-app.use(middleware.unknownEndpoint);
-app.use(middleware.errorHandler);
-
-app.listen(PORT, () => {
-  logger.info(`Server is running on port ${PORT}`);
+server.listen(PORT, () => {
+  logger.info(`Server running on port ${PORT}`);
 });
