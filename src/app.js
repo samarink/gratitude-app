@@ -1,6 +1,7 @@
 import express from 'express';
 import 'express-async-errors';
 import mongoose from 'mongoose';
+import expressSanitizer from 'express-sanitizer';
 import logger from './utils/logger';
 import middleware from './utils/middleware';
 import gratitudesRouter from './routes/gratitudes';
@@ -23,6 +24,9 @@ mongoose
   .catch((error) => {
     logger.error('error connecting to MongoDB:', error.message);
   });
+
+app.use(express.json());
+app.use(expressSanitizer());
 
 app.use('/api/gratitudes', gratitudesRouter);
 

@@ -5,6 +5,16 @@ const gratitudeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  createdAt: Date,
+  updatedAt: Date,
+});
+
+gratitudeSchema.set('toJSON', {
+  transform: (_, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString();
+    delete returnedObject._id;
+    delete returnedObject.__v;
+  },
 });
 
 const Gratitude = mongoose.model('Gratitude', gratitudeSchema);
