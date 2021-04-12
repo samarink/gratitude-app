@@ -7,6 +7,10 @@ const gratitudeSchema = new mongoose.Schema({
   },
   createdAt: Date,
   updatedAt: Date,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
 });
 
 gratitudeSchema.set('toJSON', {

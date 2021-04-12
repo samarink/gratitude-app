@@ -6,7 +6,12 @@ import { check } from 'express-validator';
 const router = express.Router();
 
 router.get('/', async (_, res) => {
-  const users = await User.find({});
+  const users = await User.find({}).populate('gratitudes', {
+    text: 1,
+    createdAt: 1,
+    updatedAt: 1,
+  });
+
   res.json(users);
 });
 
@@ -21,18 +26,19 @@ router.post(
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
 
-    const user = new User({
-      username,
-      passwordHash,
-    });
-
+    const user = new User({ username, passwordHash });
     const savedUser = await user.save();
+
     res.json(savedUser);
   }
 );
 
 router.get('/:id', async (request, response) => {
-  const user = await User.findById(request.params.id);
+  const user = await User.findById(request.params.id).populate('gratitudes', {
+    text: 1,
+    createdAt: 1,
+    updatedAt: 1,
+  });
 
   if (user) {
     return response.json(user);
