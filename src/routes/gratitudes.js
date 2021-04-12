@@ -1,7 +1,6 @@
 import express from 'express';
 import Gratitude from '../models/gratitude';
-import validateGratitude from '../validation/gratitude';
-import { toGratitudeObject } from '../utils/parseHelpers';
+const { check } = require('express-validator');
 
 const router = express.Router();
 
@@ -16,39 +15,46 @@ router.get('/:id', async (req, res) => {
   res.json(gratitude);
 });
 
-router.post('/', async (req, res) => {
-  const gratitudeObject = toGratitudeObject(req.body);
+router.post(
+  '/',
+  [check('text').notEmpty().isLength({ max: 1000 }).trim().escape()],
+  async (req, res) => {
+    const gratitudeObject = {
+      text: req.body.text,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
 
-  const { errors, isValid } = validateGratitude(gratitudeObject);
+    const gratitude = new Gratitude(gratitudeObject);
 
-  if (!isValid) {
-    return res.status(400).json(errors);
+    const savedGratitude = await gratitude.save();
+
+    res.status(201).json(savedGratitude);
   }
+);
 
-  const gratitude = new Gratitude(gratitudeObject);
+router.put(
+  '/:id',
+  [
+    check('text').notEmpty().isLength({ max: 1000 }).trim().escape(),
+    check('createdAt').isDate(),
+  ],
+  async (req, res) => {
+    const gratitudeObject = {
+      text: req.body.text,
+      createdAt: req.body.createdAt,
+      updatedAt: new Date(),
+    };
 
-  const savedGratitude = await gratitude.save();
+    const updatedGratitude = await Gratitude.findByIdAndUpdate(
+      req.params.id,
+      gratitudeObject,
+      { new: true }
+    );
 
-  res.status(201).json(savedGratitude);
-});
-
-router.put('/:id', async (req, res) => {
-  const gratitudeObject = toGratitudeObject(req.body);
-
-  const { errors, isValid } = validateGratitude(gratitudeObject);
-
-  if (!isValid) {
-    return res.status(400).json(errors);
+    res.status(201).json(updatedGratitude);
   }
-
-  const updatedGratitude = await Gratitude.findByIdAndUpdate(
-    req.params.id,
-    gratitudeObject,
-    { new: true }
-  );
-
-  res.json(updatedGratitude);
-});
+);
 
 router.delete('/:id', async (req, res) => {
   const gratitude = await Gratitude.findByIdAndRemove(req.params.id);
