@@ -5,6 +5,7 @@ import logger from './utils/logger';
 import middleware from './utils/middleware';
 import gratitudesRouter from './routes/gratitudes';
 import usersRouter from './routes/users';
+import loginRouter from './routes/login';
 import { MONGODB_URI } from './config';
 
 const app = express();
@@ -30,6 +31,7 @@ app.use(middleware.requestLogger);
 
 app.use('/api/gratitudes', gratitudesRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/login', loginRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
