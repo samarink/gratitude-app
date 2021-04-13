@@ -29,12 +29,11 @@ const gratitudesInDB = async () => {
   return gratitudes.map((b) => b.toJSON());
 };
 
-const getValidToken = async () => {
-  const user = new User({
-    username: 'testting',
-    password: 'password123456789!#',
-  });
-
+const getValidToken = async (
+  username = 'testuser',
+  password = 'testpassword'
+) => {
+  const user = new User({ username, password });
   const savedUser = await user.save();
 
   const payload = {
