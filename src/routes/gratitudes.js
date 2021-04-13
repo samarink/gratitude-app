@@ -23,7 +23,7 @@ router.get('/:id', async (req, res) => {
 
 router.post(
   '/',
-  [check('text').notEmpty().isLength({ max: 1000 }).trim().escape()],
+  [check('text').notEmpty().trim().escape()],
   async (req, res) => {
     const decodedToken = jwt.verify(req.token, JWT_SECRET);
 
@@ -54,10 +54,7 @@ router.post(
 
 router.put(
   '/:id',
-  [
-    check('text').notEmpty().isLength({ max: 1000 }).trim().escape(),
-    check('createdAt').isDate(),
-  ],
+  [check('text').notEmpty().isLength({ max: 1000 }).trim().escape()],
   async (req, res) => {
     const decodedToken = jwt.verify(req.token, JWT_SECRET);
 
