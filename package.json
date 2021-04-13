@@ -6,13 +6,16 @@
   "scripts": {
     "start": "node -r esm ./src/index.js",
     "start:dev": "nodemon -r esm ./src/index.js",
+    "build:ui": "rm -rf build && cd frontend && npm run build --prod && cp -r build ../",
     "lint": "eslint ./src"
   },
+  "proxy": "http://localhost:3000",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",

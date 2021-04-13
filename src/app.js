@@ -1,12 +1,15 @@
 import express from 'express';
 import 'express-async-errors';
 import mongoose from 'mongoose';
+import cors from 'cors';
+
 import logger from './utils/logger';
 import middleware from './utils/middleware';
+import { MONGODB_URI } from './config';
+
 import gratitudesRouter from './routes/gratitudes';
 import usersRouter from './routes/users';
 import loginRouter from './routes/login';
-import { MONGODB_URI } from './config';
 
 const app = express();
 
@@ -26,6 +29,8 @@ mongoose
     logger.error('error connecting to MongoDB:', error.message);
   });
 
+app.use(express.static('build'));
+app.use(cors());
 app.use(express.json());
 app.use(middleware.requestLogger);
 app.use(middleware.tokenExtractor);
