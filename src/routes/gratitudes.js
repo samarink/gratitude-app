@@ -37,8 +37,6 @@ router.post(
 
     const gratitudeObject = {
       text: req.body.text,
-      createdAt: new Date(),
-      updatedAt: new Date(),
       user: user._id,
     };
 
